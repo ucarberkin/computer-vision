@@ -1,45 +1,47 @@
-# Panorama Stitching
+# Computer Vision
 
-Automatic panorama construction from multiple overlapping images. Implements a full pipeline: SIFT feature detection, Lowe's ratio test for correspondence filtering, RANSAC homography estimation, perspective warping, and mask-based image blending.
+Three projects covering classical computer vision: color channel alignment and demosaicing, projective geometry with image denoising, and automatic panorama stitching.
 
-## Framework
+## Projects
+
+ **Note:** The notebook files are too large for GitHub's online renderer. Use the PDF links to view the full output with visualizations, or clone the repo and open the notebooks locally.
+
+### 1. Color Alignment & Demosaicing ([pdf](color-alignment/color_alignment.pdf) | [notebook](color-alignment/color_alignment.ipynb))
+
+Alignment and reconstruction of color images from separated or mosaiced channels.
+
+- ZNCC-based brute-force alignment of misaligned RGB channels
+- Application to historical Prokudin-Gorskii photograph set
+- Bayer demosaicing via bilinear interpolation with custom convolution kernels
+- Freeman method demosaicing using G-channel guided median filtering
+
+### 2. Geometry, Homography & Denoising ([pdf](geometry-denoising/geometry_denoising.pdf) | [notebook](geometry-denoising/geometry_denoising.ipynb))
+
+Projective geometry tools and non-local means denoising with both classical and neural approaches.
+
+- Least-squares vanishing point estimation from annotated line segments
+- Homography computation and image rectification (both via cv2 and manual implementation)
+- Non-Local Means denoising with integral image acceleration
+- Neural NLM using pretrained ResNet features as patch descriptors
+- Systematic hyperparameter search across four noise regimes (Gaussian and salt & pepper)
+
+### 3. Panorama Stitching ([pdf](panorama-stitching/panorama_stitching.pdf) | [notebook](panorama-stitching/panorama_stitching.ipynb))
+
+Automatic panorama construction from multiple overlapping images.
+
+- SIFT keypoint detection and descriptor extraction
+- Brute-force matching with Lowe's ratio test for correspondence filtering
+- RANSAC homography estimation with threshold sensitivity analysis
+- Perspective warping and mask-based blending
+
+#### Results (Panorama)
+
+| Image Set 1 | Image Set 2 |
+|---|---|
+| ![Set 1](panorama-stitching/results/panorama_color.jpg) | ![Set 2](panorama-stitching/results/extra_panorama_color.jpg) |
+
+## Requirements
 
 ```
-Input images (3 overlapping views for image set 1; 2 for image set 2)
-    -> SIFT keypoint detection + descriptor extraction
-    -> BFMatcher with Lowe's ratio test (correspondence filtering)
-    -> RANSAC homography estimation (robust outlier rejection)
-    -> Perspective warp into common coordinate frame
-    -> Mask-based blending (normalize by overlap count)
-    -> Final panorama (grayscale + color)
-```
-
-## Results
-
-### Image Set 1
-![Panorama Color](results/panorama_color.jpg)
-
-### Image Set 2
-![Extra Panorama Color](results/extra_panorama_color.jpg)
-
-## Methodology
-
-1. **Feature detection**: SIFT extracts scale- and rotation-invariant keypoints (~800-900 per image)
-2. **Feature matching**: Brute-force matching with Lowe's ratio test (threshold 0.8) filters ambiguous correspondences
-3. **Homography estimation**: RANSAC fits a projective transformation while rejecting outlier matches. Multiple thresholds (1.0, 3.0, 5.0, 10.0) are compared to analyze sensitivity
-4. **Warping**: Left and right images are warped into the center image's coordinate frame via the estimated homographies
-5. **Blending**: Overlapping regions are averaged by pixel-wise mask counts to reduce seams
-
-The full process with intermediate visualizations (keypoints, correspondences, RANSAC filtering, individual warps) is documented in the [notebook PDF](panorama_stitching.pdf) and the [Jupyter notebook](panorama_stitching.ipynb).
-
-## Setup
-
-```bash
 pip install -r requirements.txt
 ```
-
-Requires Python 3.8+ with OpenCV, NumPy, scikit-image, matplotlib, and imageio.
-
-## Usage
-
-Open and run `panorama_stitching.ipynb`. Input images are in the `images/` directory.
