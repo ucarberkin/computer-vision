@@ -3,3 +3,7 @@ matplotlib
 opencv-python
 scikit-image
 imageio
+scipy
+Pillow
+torch
+torchvision
