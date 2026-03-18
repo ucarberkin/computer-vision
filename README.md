@@ -1,6 +1,6 @@
 # Computer Vision
 
-Three projects covering classical computer vision: color channel alignment and demosaicing, projective geometry with image denoising, and automatic panorama stitching.
+Four projects covering classical and deep computer vision: color channel alignment and demosaicing, projective geometry with image denoising, automatic panorama stitching, and depth-guided panoramic stitching.
 
 ## Projects
 
@@ -39,6 +39,22 @@ Automatic panorama construction from multiple overlapping images.
 | Image Set 1 | Image Set 2 |
 |---|---|
 | ![Set 1](panorama-stitching/results/panorama_color.jpg) | ![Set 2](panorama-stitching/results/extra_panorama_color.jpg) |
+
+### 4. Depth-Guided Panoramic Stitching ([readme](depth-guided-stitching/README.md) | [notebook](depth-guided-stitching/experiments.ipynb))
+
+Using monocular depth estimation to improve panoramic image stitching via depth-aware seam selection and evaluation.
+
+- N-image stitching pipeline with all-pairs SIFT matching, BFS initialization, and bundle adjustment
+- Monocular depth estimation with Depth Anything v2 Large and Marigold, with global affine scale alignment
+- DP-optimized non-linear seam that combines image gradient and depth disagreement costs
+- Topology-agnostic depth-consistency evaluation metric for seam quality assessment
+- Evaluated across 10+ scenes (indoor and outdoor) with two depth models
+
+#### Results (Depth-Guided Stitching)
+
+| Baseline (center-cut) | Depth-guided (DA2 Large) | Depth-guided (Marigold)
+|---|---|---|
+| ![Baseline](depth-guided-stitching/outputs/experiments/panoramas/CMU1-3_baseline.png) | ![Depth-guided (DA2)](depth-guided-stitching/outputs/experiments/panoramas/CMU1-3_depth_DA2_Large.png) | ![Marigold](depth-guided-stitching/outputs/experiments/panoramas/CMU1-3_depth_Marigold.png) |
 
 ## Requirements
 

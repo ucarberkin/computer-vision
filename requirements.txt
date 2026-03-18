@@ -7,3 +7,6 @@ scipy
 Pillow
 torch
 torchvision
+transformers
+diffusers
+accelerate
